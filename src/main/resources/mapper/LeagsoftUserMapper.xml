@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.xue.repository.dao.LeagsoftUserMapper">
+
+  <insert id="addUser" parameterType="com.xue.entity.model.LeagsoftUser" >
+      insert into leagsoft_user(deviceName,leagsoftIp,mac,macManufacturers,deviceType,department,leagsoftName)
+       values(#{deviceName},#{leagsoftIp},#{mac},#{macManufacturers},#{deviceType},#{department},#{leagsoftName})
+  </insert>
+
+</mapper>
