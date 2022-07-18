@@ -1,12 +1,9 @@
 package com.xue.service.Impl;
 
-import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
-
+import com.xue.entity.model.LeagsoftUser;
+import com.xue.repository.dao.LeagsoftUserMapper;
+import com.xue.service.LeagsoftUserService;
+import com.xue.transcation.MyException;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -14,32 +11,32 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.xue.entity.model.LeagsoftUser;
-import com.xue.repository.dao.LeagsoftUserMapper;
-import com.xue.service.LeagsoftUserService;
-import com.xue.transcation.MyException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 @Service
 public class LeagsoftUserServiceImpl implements LeagsoftUserService {
 	
 	@Autowired
 	private LeagsoftUserMapper userMapper;
 
-	@Value(value = "${spring.datasource.driver-class-name}")
-	private String driver;
+//	@Value(value = "${spring.datasource.driver-class-name}")
+//	private String driver;
+//
+//	@Value(value = "${spring.datasource.url}")
+//	private String url;
+//
+//	@Value(value = "${spring.datasource.username}")
+//	private String userName;
+//
+//	@Value(value = "${spring.datasource.password}")
+//	private String password;
 
-	@Value(value = "${spring.datasource.url}")
-	private String url;
-
-	@Value(value = "${spring.datasource.username}")
-	private String userName;
-
-	@Value(value = "${spring.datasource.password}")
-	private String password;
-
+	@Transactional
 	@Override
 	public int addUser(MultipartFile file) throws Exception{
 		
@@ -55,16 +52,19 @@ public class LeagsoftUserServiceImpl implements LeagsoftUserService {
 		
 		Workbook wb = null;
 
+//		//清库
+//		Class.forName(driver);
+//		Connection conn = DriverManager.getConnection(url, userName, password);
+//		Statement stat = conn.createStatement();
+//		String sql="delete from leagsoft_user where leagsoft_user.sapId IS NOT NULL";
+//		stat.executeUpdate(sql);
+//		// 释放资源
+//		stat.close();
+//		conn.close();
+
 		//清库
-		Class.forName(driver);
-		Connection conn = DriverManager.getConnection(url, userName, password);
-		Statement stat = conn.createStatement();
-		String sql="delete from leagsoft_user where leagsoft_user.sapId IS NOT NULL";
-		stat.executeUpdate(sql);
-		// 释放资源
-		stat.close();
-		conn.close();
-		
+		userMapper.clearAll();
+
 		if(suffix.equals("xlsx")){
 			
 			wb = new XSSFWorkbook(ins);
@@ -104,12 +104,12 @@ public class LeagsoftUserServiceImpl implements LeagsoftUserService {
 				String userName = row.getCell(6).getStringCellValue();
 
 				user.setDeviceName(deviceName);
-				user.setLeagsoftIp(ip);
+				user.setLeagsoftIp(ip.trim());
 				user.setMac(macAddr);
 				user.setMacManufacturers(macManufactor);
 				user.setDeviceType(deviceType);
 				user.setDepartment(departmentName);
-				user.setLeagsoftName(userName);
+				user.setLeagsoftName(userName.trim());
 
 				userList.add(user);
 

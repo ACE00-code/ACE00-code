@@ -5,5 +5,8 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface LeagsoftUserMapper {
+
+    void clearAll();
+
     int addUser(LeagsoftUser user);
 }

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xue.repository.dao.StaffTmpMapper">
+
+    <update id="saveAC" parameterType="com.xue.entity.model.ACUser">
+        update staff_tmp set ac_name =#{acName} ,ac_ip=#{acIp} where staff_tmp.name=#{acName};
+    </update>
+
+    <select id="queryACUser" resultType="com.xue.entity.model.ACUser" >
+        select * from ac_user group by acName having count('acName')=1;
+    </select>
+
+    <select id="queryACOne" parameterType="com.xue.entity.model.ACUser" resultType="int">
+        select count('name') from staff_tmp where name=#{acName}
+    </select>
+
+    <update id="saveLeagsoft" parameterType="com.xue.entity.model.LeagsoftUser">
+        update staff_tmp set leagsoft_name =#{leagsoftName},leagsoft_ip=#{leagsoftIp} where staff_tmp.name=#{leagsoftName};
+    </update>
+
+    <select id="queryLeagsoft" resultType="com.xue.entity.model.LeagsoftUser">
+        select * from leagsoft_user group by leagsoftName having count('leagsoftName')=1;
+    </select>
+
+    <select id="queryLeagsoftOne" parameterType="com.xue.entity.model.LeagsoftUser" resultType="int">
+        select count('name') from staff_tmp where name=#{leagsoftName}
+    </select>
+
+    <update id="saveNetdisk" parameterType="com.xue.entity.model.NetdistUser">
+        update staff_tmp set netdist_name =#{name} where staff_tmp.name=#{name};
+    </update>
+
+    <select id="queryNetdisk" resultType="com.xue.entity.model.NetdistUser">
+        select * from netdisk_user group by name having count('name')=1;
+    </select>
+
+    <select id="queryNetdiskOne" parameterType="com.xue.entity.model.NetdistUser" resultType="int">
+        select count('name') from staff_tmp where name like #{name}
+    </select>
+
+</mapper>

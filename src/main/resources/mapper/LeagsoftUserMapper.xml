@@ -9,4 +9,8 @@
        values(#{deviceName},#{leagsoftIp},#{mac},#{macManufacturers},#{deviceType},#{department},#{leagsoftName})
   </insert>
 
+    <delete id="clearAll" >
+        delete from leagsoft_user where 1=1
+    </delete>
+
 </mapper>

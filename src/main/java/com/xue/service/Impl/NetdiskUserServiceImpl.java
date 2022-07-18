@@ -2,20 +2,16 @@ package com.xue.service.Impl;
 
 import com.xue.entity.model.NetdistUser;
 import com.xue.repository.dao.NetdiskUserMapper;
-import com.xue.service.ACUserService;
 import com.xue.service.NetdiskUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,18 +21,7 @@ public class NetdiskUserServiceImpl implements NetdiskUserService {
 	@Autowired
 	private NetdiskUserMapper netdiskUserMapper;
 
-	@Value(value = "${spring.datasource.driver-class-name}")
-	private String driver;
-
-	@Value(value = "${spring.datasource.url}")
-	private String url;
-
-	@Value(value = "${spring.datasource.username}")
-	private String userName;
-
-	@Value(value = "${spring.datasource.password}")
-	private String password;
-
+	@Transactional
 	@Override
 	public int addUser(MultipartFile file) throws Exception {
 
@@ -50,21 +35,14 @@ public class NetdiskUserServiceImpl implements NetdiskUserService {
 		String line=null;
 
 		//清库
-		Class.forName(driver);
-		Connection conn = DriverManager.getConnection(url, userName, password);
-		Statement stat = conn.createStatement();
-		String sql="delete from netdisk_user where netdisk_user.sapid IS NOT NULL";
-		stat.executeUpdate(sql);
-		// 释放资源
-		stat.close();
-		conn.close();
+		netdiskUserMapper.clearAll();
 
 		List<NetdistUser> userList = new ArrayList<>();
 		while ((line= reader.readLine())!=null){
 			NetdistUser netdistUser=new NetdistUser();
 			String item[] = line.split(",");
 
-			netdistUser.setName(item[0]);
+			netdistUser.setName(item[0].trim());
 			netdistUser.setEmail(item[1]);
 			netdistUser.setPhone(item[2]);
 			netdistUser.setDatacenter(item[3]);
