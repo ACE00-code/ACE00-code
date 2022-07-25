@@ -19,7 +19,7 @@ public class StaffTmpController {
     @Autowired
     private StaffTmpService staffTmpService;
 
-    @Scheduled(cron = "0 0/5 * * * ?")
+    @Scheduled(cron = "0 0 0 * * ?")
     private void configureTasks(){
         System.out.println("启动任务");
         staffTmpService.saveAC();

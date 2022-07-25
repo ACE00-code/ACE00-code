@@ -49,7 +49,7 @@ public class StaffTmpServiceImpl implements StaffTmpService {
         netdistUsers=staffTmpMapper.queryNetdisk();
         System.out.println("net:"+netdistUsers.size());
         for (NetdistUser netdistUser:netdistUsers){
-            System.out.println(netdistUser.toString());
+//            System.out.println(netdistUser.toString());
             if (staffTmpMapper.queryNetdiskOne(netdistUser)==1)
 //                System.out.println(netdistUser.toString());
                 staffTmpMapper.saveNetdisk(netdistUser);
